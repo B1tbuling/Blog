@@ -14,43 +14,38 @@ def get_posts_list(request):
     return render(request, 'posts_list.html', context={'posts': posts})
 
 
-# def get_post_form(request):
-#     form = TestForm
-#     return render(request, 'post_create.html', context={'form': form})
-#     # return render(request, 'post_create.html', context={'forms': form})
-
-
-def create_post(request):
+def get_form_create_post(request):
     form = PostForm
     return render(request, 'post_create.html', context={'form': form})
 
 
-def add_post(request):
-    date = dict(request.POST)
-    title = date['title'][0]
-    text = date['text'][0]
-    if title == "" or text == "":
-        return redirect('create_post_url')
-    else:
+def create_post(request):
+    form_data = PostForm(request.POST)
+    if form_data.is_valid():
+        data = dict(request.POST)
+        title = data['title'][0]
+        text = data['text'][0]
         post = Posts.objects.create(title=title, text=text)
-        post.save()
-        return redirect('get_posts_list_url')
+        return redirect(reverse('get_post_page_url', kwargs={'pk': post.id}))
+    else:
+        return redirect('create_post_url')
+
+
+def get_form_update_post(request, pk):
+    post = Posts.objects.get(id=pk)
+    form = PostForm({'title': post.title, 'text': post.text})
+    return render(request, 'post_update.html', context={'form': form, 'post_id': pk})
 
 
 def update_post(request, pk):
-    post = Posts.objects.get(id=pk)
-    return render(request, 'post_update.html', context={'post_update': post})
-
-
-def change_post(request, pk):
-    date = dict(request.POST)
-    title = date['title'][0]
-    text = date['text'][0]
-    if title == "" or text == "":
-        return redirect('get_posts_list_url')
-    else:
+    form_data = PostForm(request.POST)
+    if form_data.is_valid():
+        data = dict(request.POST)
         post = Posts.objects.get(id=pk)
-        post.title = title
-        post.text = text
+        post.title = data['title'][0]
+        post.text = data['text'][0]
         post.save()
-        return redirect('get_posts_list_url')
+        return redirect(reverse('get_post_page_url', kwargs={'pk': post.id}))
+    return redirect(reverse('get_form_update_post', kwargs={'pk': pk}))
+
+
