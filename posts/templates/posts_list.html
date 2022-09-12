@@ -1,0 +1,24 @@
+{% extends 'templates/index.html' %}
+
+{% block content %}
+    {% for post in posts %}
+        <h3>
+            <a href="{% url 'get_post_page_url' post.id %}">
+                {{ post.title }}
+            </a>
+        </h3>
+    {% endfor %}
+{% endblock %}
+
+<tr>
+    <th><label for="id_one">One:</label></th>
+    <td>
+      <input type="text" name="one" required id="id_one">
+    </td>
+  </tr>
+  <tr>
+    <th><label for="id_two">Two:</label></th>
+    <td>
+      <input type="number" name="two" required id="id_two">
+    </td>
+  </tr>

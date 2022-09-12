@@ -1,0 +1,26 @@
+{% extends 'templates/index.html' %}
+
+{% block content %}
+    <form action="{% url 'add_post_url' %}" method="post">
+        {% csrf_token %}
+{# Для ебланов полных #}
+{#        <div>#}
+{#            <label for="id_1">Add title:</label>#}
+{#            <input type="text" name="title" id="id_1">#}
+{#        </div>#}
+{#        <div>#}
+{#            <label for="id_2">Write text:</label>#}
+{#            <input type="text" name="text" id="id_2">#}
+{#        </div>#}
+        <div>
+            <div>Title</div>
+            {{ form.title }}
+        </div>
+        <div>
+            <div>Text</div>
+            {{ form.text }}
+        </div>
+        <button type="submit">Send</button>
+    </form>
+{% endblock %}
+
