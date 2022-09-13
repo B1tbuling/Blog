@@ -15,3 +15,10 @@ class Posts(models.Model):
 
     def get_absolute_url(self):
         return reverse('get_post_page_url', kwargs={'pk': self.id})
+
+
+class Tag(models.Model):
+    tag = models.SlugField(max_length=40, unique=True)
+
+    class Meta:
+        db_table = "tag_list"
