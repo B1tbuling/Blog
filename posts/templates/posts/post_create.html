@@ -1,7 +1,7 @@
 {% extends 'templates/index.html' %}
 
 {% block content %}
-    <form action="{% url 'add_form_create_post' %}" method="post">
+    <form action="{% url 'create_post_url' %}" method="post">
         {% csrf_token %}
         <div>
             <div>Title</div>

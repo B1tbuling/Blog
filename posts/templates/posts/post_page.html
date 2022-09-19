@@ -14,6 +14,8 @@
                     <a href="{% url 'get_tag_page_url' tag.tag %}">#{{ tag.tag }}</a>
                 {% endfor %}
             </div>
+            <a href="{% url 'update_post_url' post.id %}">Update post</a>
+            <a href="{% url 'update_post_url' post.id %}">Delete post</a>
         </div>
     </div>
 {% endblock %}
