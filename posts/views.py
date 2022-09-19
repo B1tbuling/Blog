@@ -6,7 +6,8 @@ from django.http import HttpResponse
 
 def get_post_page(request, pk):
     post = Posts.objects.get(id=pk)
-    return render(request, 'post_page.html', context={'post': post})
+    tags = post.tags.all()
+    return render(request, 'post_page.html', context={'post': post, 'tags': tags})
 
 
 def get_posts_list(request):
@@ -16,12 +17,15 @@ def get_posts_list(request):
 
 def get_form_create_post(request):
     form = PostModelForm()
-    return render(request, 'post_create.html', context={'form': form})
+    tags = Tag.objects.all()
+    return render(request, 'post_create.html', context={'form': form, 'tags': tags})
 
 
 def create_post(request):
     # form_data = PostForm(request.POST)
+
     form_post = PostModelForm(request.POST)
+    print(request.POST)
     if form_post.is_valid():
         post = form_post.save()
         # data = dict(request.POST)
@@ -58,7 +62,9 @@ def update_post(request, pk):
 
 def get_tag_page(request, slug):
     tag = Tag.objects.get(tag__iexact=slug)
-    return render(request, 'tag_page.html', context={'tag': tag})
+    posts = tag.posts.all()
+    print(posts)
+    return render(request, 'tag_page.html', context={'tag': tag, 'posts': posts})
 
 
 def get_tags_list(request):

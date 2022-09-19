@@ -1,0 +1,14 @@
+{% extends 'templates/index.html' %}
+
+{% block content %}
+    {% for tag in tags %}
+        <h3>
+            <a href="{% url 'get_tag_page_url' tag.tag %}">
+                #{{ tag.tag }}
+            </a>
+        </h3>
+    {% endfor %}
+    <a class="btn btn-primary" href="{% url 'get_form_create_tag_url' %}" role="button">
+        Create new tag
+    </a>
+{% endblock %}

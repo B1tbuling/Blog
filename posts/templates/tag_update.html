@@ -1,0 +1,9 @@
+{% extends 'templates/index.html' %}
+
+{% block content %}
+    <form action="{% url 'change_form_update_tag_url' slug %}" method="post">
+        {% csrf_token %}
+        {{ tag_form }}
+        <button type="submit">Update</button>
+    </form>
+{% endblock %}

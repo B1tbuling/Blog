@@ -11,6 +11,15 @@
             <div>Text</div>
             {{ form.text }}
         </div>
+        <div style="width: 600px">
+            <lable>Choice Tag</lable>
+            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                <option selected>#Tag</option>
+                {% for tag in tags %}
+                    <option value="{{ tag.id }}">#{{ tag.tag }}</option>
+                {% endfor %}
+            </select>
+        </div>
         <button type="submit">Send</button>
     </form>
 {% endblock %}

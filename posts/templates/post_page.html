@@ -3,11 +3,17 @@
 {% block content %}
     <div class="card" style="width: 18rem;">
         <div class="card-body">
-        <h5 class="card-title">{{ post.title }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">For Misha Sorokin</h6>
-        <p class="card-text">{{ post.text }}</p>
-        <a href="#" class="card-link">Comment</a>
-        <a href="#" class="card-link">Like</a>
+            <h5 class="card-title">{{ post.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">For Misha Sorokin</h6>
+            <p class="card-text">{{ post.text }}</p>
+            <a href="#" class="card-link">Comment</a>
+            <a href="#" class="card-link">Like</a>
+            <div>
+                <label>Tags:</label>
+                {% for tag in tags %}
+                    <a href="{% url 'get_tag_page_url' tag.tag %}">#{{ tag.tag }}</a>
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -19,6 +19,10 @@ class Posts(models.Model):
 
 class Tag(models.Model):
     tag = models.SlugField(max_length=40, unique=True)
+    posts = models.ManyToManyField('Posts', blank=True, related_name='tags')
 
     class Meta:
         db_table = "tag_list"
+
+    def get_absolute_url(self):
+        return reverse('get_post_page_url', kwargs={'slug': self.tag})
