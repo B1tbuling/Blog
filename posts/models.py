@@ -9,6 +9,7 @@ class Posts(models.Model):
     header_color = models.CharField(default='dark', max_length=30)
     author = models.IntegerField(default=1)
     amount_likes = models.IntegerField(default=0)
+    tags = models.ManyToManyField('Tag', blank=True, related_name='posts')
 
     class Meta:
         db_table = "posts_list"
@@ -19,10 +20,13 @@ class Posts(models.Model):
 
 class Tag(models.Model):
     tag = models.SlugField(max_length=40, unique=True)
-    posts = models.ManyToManyField('Posts', blank=True, related_name='tags')
+    # posts = models.ManyToManyField('Posts', blank=True, related_name='tags')
 
     class Meta:
         db_table = "tag_list"
 
     def get_absolute_url(self):
         return reverse('get_post_page_url', kwargs={'slug': self.tag})
+
+    def __str__(self):
+        return f'#{self.tag}'

@@ -50,7 +50,10 @@ def update_post(request, pk):
     return HttpResponse(status=405)
 
 
-def delete_post(request, pk): ...
+def delete_post(request, pk):
+    post = Posts.objects.get(id=pk)
+    post.delete()
+    return redirect(reverse('get_posts_list_url'))
 
 
 def get_tag_page(request, slug):
@@ -93,4 +96,7 @@ def update_tag(request, slug):
             return redirect(reverse('get_tag_page_url', kwargs={'slug': new_tag.tag}))
 
 
-def delete_tag(request, slug): ...
+def delete_tag(request, slug):
+    tag = Tag.objects.get(tag=slug)
+    tag.delete()
+    return redirect(reverse('get_tags_list_url'))

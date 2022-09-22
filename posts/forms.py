@@ -11,7 +11,11 @@ class PostForm(forms.Form):
 class PostModelForm(forms.ModelForm):
     class Meta:
         model = Posts
-        fields = ['title', 'text']
+        fields = ['title', 'text', 'tags']
+
+        widgets = {
+            'tags': forms.SelectMultiple(attrs={'class': 'form-select form-select-lg mb-3', 'style': 'width: 600px'})
+        }
 
 
 class TagModelForm(forms.ModelForm):
