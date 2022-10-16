@@ -1,5 +1,6 @@
 from django.db import models
 from django.shortcuts import reverse
+from django.contrib.auth.models import User
 
 
 class Posts(models.Model):
@@ -30,3 +31,31 @@ class Tag(models.Model):
 
     def __str__(self):
         return f'#{self.tag}'
+
+
+class Comments(models.Model):
+    post = models.ForeignKey('Posts', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField(blank=True)
+    amount_likes = models.IntegerField(default=0)
+    date_create = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "comments"
+
+
+class CommentLike(models.Model):
+    comment = models.ForeignKey(Comments, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "comments_likes"
+
+
+class PostLike(models.Model):
+    post = models.ForeignKey(Posts, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "posts_likes"
+

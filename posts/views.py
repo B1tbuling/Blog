@@ -4,10 +4,49 @@ from .models import *
 from django.http import HttpResponse
 
 
+def post_like(request, pk):
+    PostLike(post_id=pk, user_id=request.user).save()
+    return HttpResponse(200)
+
+
+def comment_like(request, pk, id_comm):
+    CommentLike(comment_id=id_comm, user_id=request.user.id).save()
+    return HttpResponse(200)
+
+
+def add_comment(request, pk):
+    # Как-то понять, что пользователь аутефицирован
+    Comments.objects.create(text=request.POST['text'], user_id=request.user.id, post_id=pk).save()
+    return redirect(reverse('get_post_page_url', kwargs={'pk': pk}))
+
+
+def update_comment(request, id_comm):
+    comment = Comments.objects.get(id=id_comm)
+    comment_form = CommentForm(request.POST, instance=comment)
+    if comment_form.is_valid():
+        comment_form.save()
+        return redirect(reverse('get_post_page_url', kwargs={'pk': comment.post.id}))
+    return HttpResponse(422)
+
+
+def delete_comment(request, id_comm):
+    comment = Comments.objects.get(id=id_comm)
+    pk = comment.post.id
+    comment.delete()
+    return redirect(reverse('get_post_page_url', kwargs={'pk': pk}))
+
+
 def get_post_page(request, pk):
+    comments_dict = []
+    form = CommentForm
     post = Posts.objects.get(id=pk)
     tags = post.tags.all()
-    return render(request, 'posts/post_page.html', context={'post': post, 'tags': tags})
+    comments = post.comments_set.all()
+    for comment in comments:
+        amount_like = len(CommentLike.objects.filter(comment_id=comment))
+        print(amount_like)
+        comments_dict.append({'form_update': CommentForm(instance=comment), 'comment': comment, 'amount_like': amount_like})
+    return render(request, 'posts/post_page.html', context={'post': post, 'tags': tags, 'comments': comments_dict, 'form_comment': form})
 
 
 def get_posts_list(request):
@@ -100,3 +139,4 @@ def delete_tag(request, slug):
     tag = Tag.objects.get(tag=slug)
     tag.delete()
     return redirect(reverse('get_tags_list_url'))
+

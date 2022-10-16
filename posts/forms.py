@@ -23,3 +23,12 @@ class TagModelForm(forms.ModelForm):
         model = Tag
         fields = ['tag']
 
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comments
+        fields = ['text']
+
+        widgets = {
+            'text': forms.TextInput()
+        }

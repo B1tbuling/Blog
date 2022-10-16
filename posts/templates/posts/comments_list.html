@@ -1,0 +1,93 @@
+<div class="card-body">
+    {% for comment in comments %}
+        <div style="display: flex; flex-direction: row; margin-bottom: 10px">
+
+            <div style="padding: 10px">
+                <img src="https://avatars.mds.yandex.net/get-altay/4236413/2a00000179fd9f3184a39e41e49db211dcb1/XXXL" style="border-radius: 50px; width: 50px; height: 50px">
+            </div>
+            <div style="margin-left: 10px; flex-direction: column;">
+                <div style="display: flex; flex-direction: row;">
+                    <h5><b>{{ comment.comment.user }}</b></h5>
+                    <h5 style="margin-left: 20px">{{ comment.comment.date_create }}</h5>
+                </div>
+
+
+                <div id="comment{{ comment.comment.id }}" style="display: flex; flex-direction: column;">
+                    <div>
+                        {{ comment.comment.text }}
+                    </div>
+                    <div style="margin-right: 30px; display: flex; flex-direction: row">
+                        <button onclick="commentLike('{{ comment.comment.id }}')">
+                            {% load static %}
+                            <img style="height: 25px; width: 25px; justify-content: center; margin-right: 5px" src="{% static 'image/heart-solid.svg' %}">
+                        </button>
+                        <div style="margin-right: 30px;">
+                            {{ comment.amount_like }}
+                        </div>
+                        {% if request.user.id == comment.comment.user.id %}
+                            <div>
+                                <button onclick="showUpdateComment({{ comment.comment.id }})" style="margin-right: 30px">edit</button>
+                                <a href="{% url 'delete_comment_url' comment.comment.id %}">delete</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div id="update_comment{{ comment.comment.id }}" style="display: none;">
+                    <div style="display: flex; flex-direction: row">
+                        <form
+                            action="{% url 'update_comment_url' comment.comment.id %}"
+                            method="post"
+                        >
+                            <div style="margin: 10px 10px 10px 0">
+                                {% csrf_token %}
+                                {{ comment.form_update }}
+                            </div>
+
+                            <div style="display: flex; flex-direction: row">
+
+                                <div style="margin-right: 30px; display: flex; flex-direction: row">
+                                    <button type="button" onclick="commentLike('{{ comment.comment.id }}')">
+                                        {% load static %}
+                                        <img style="height: 25px; width: 25px; justify-content: center; margin-right: 5px" src="{% static 'image/heart-solid.svg' %}">
+                                    </button>
+                                    <div>
+                                        {{ comment.amount_like }}
+                                    </div>
+                                </div>
+                                {% if request.user.id == comment.comment.user.id %}
+                                    <div style="display: flex; flex-direction: row">
+                                        <button type="button" onclick="showUpdateComment({{ comment.comment.id }})" style="margin-right: 30px">cancel</button>
+                                        <button type="submit" style="margin-right: 30px">save</button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <script>
+        async function postLike(id_comm){
+            await fetch('comment/like/' + id_comm)
+            location.reload()
+        }
+
+        async function commentLike(id_comm){
+            await fetch('comment/like/' + id_comm)
+            location.reload()
+        }
+
+        function showUpdateComment(id){
+            let commentForm = document.querySelector('#update_comment' + id)
+            let comment = document.querySelector('#comment' + id)
+            if(commentForm.style.display === 'none'){
+                commentForm.style.display = 'block'
+                comment.style.display = 'none'
+            }else{
+                commentForm.style.display = 'none'
+                comment.style.display = 'block'
+            }
+        }
+    </script>
+</div>

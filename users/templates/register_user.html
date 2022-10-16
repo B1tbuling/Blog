@@ -1,0 +1,15 @@
+{% extends 'templates/index.html' %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+            {% for f in form %}
+                <label>{{ f.label }}</label>
+                <div>{{ f }}</div>
+                {% if f.errors %}
+                    <div class="alert alert-danger" style="margin-top: 10px">{{ f.errors }}</div>
+                {% endif %}
+            {% endfor %}
+        <button type="submit" style="margin-top:20px">Registration</button>
+    </form>
+{% endblock %}
