@@ -5,7 +5,7 @@ from django.http import HttpResponse
 
 
 def post_like(request, pk):
-    PostLike(post_id=pk, user_id=request.user).save()
+    PostLike(post_id=pk, user_id=request.user.id).save()
     return HttpResponse(200)
 
 
@@ -42,11 +42,20 @@ def get_post_page(request, pk):
     post = Posts.objects.get(id=pk)
     tags = post.tags.all()
     comments = post.comments_set.all()
+    amount_like_post = len(PostLike.objects.filter(post_id=pk))
     for comment in comments:
-        amount_like = len(CommentLike.objects.filter(comment_id=comment))
-        print(amount_like)
-        comments_dict.append({'form_update': CommentForm(instance=comment), 'comment': comment, 'amount_like': amount_like})
-    return render(request, 'posts/post_page.html', context={'post': post, 'tags': tags, 'comments': comments_dict, 'form_comment': form})
+        amount_like_comment = len(CommentLike.objects.filter(comment_id=comment))
+        comments_dict.append({'form_update': CommentForm(instance=comment), 'comment': comment, 'amount_like_comment': amount_like_comment})
+    return render(
+                request,
+                'posts/post_page.html',
+                context={'post': post,
+                         'tags': tags,
+                         'comments': comments_dict,
+                         'form_comment': form,
+                         'amount_like_post': amount_like_post
+                         }
+                )
 
 
 def get_posts_list(request):
@@ -65,6 +74,8 @@ def create_post(request):
         print(request.POST)
         if form_post.is_valid():
             post = form_post.save()
+            post.user_id = request.user.id
+            post.save()
             return redirect(reverse('get_post_page_url', kwargs={'pk': post.id}))
         else:
             return redirect('create_post_url')

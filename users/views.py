@@ -8,7 +8,7 @@ from django.http import HttpResponse
 
 def register_user(request):
     if request.method == 'GET':
-        reg_form = UserCreationForm()
+        reg_form = RegisterUserForm()
         return render(request, 'register_user.html', context={'form': reg_form})
 
     if request.method == 'POST':
@@ -47,8 +47,6 @@ def login_user(request):
 #     def post(self, request):
 #         AuthenticationForm(request.POST)
 #         return redirect('main_page_url')
-
-
 
 
 def logout_user(request):

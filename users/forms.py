@@ -7,10 +7,9 @@ from django.contrib.auth.models import User
 
 
 class RegisterUserForm(UserCreationForm):
-    # first_name = forms.CharField(label='First name')
-    # last_name = forms.CharField(label='Last name')
-    # email = forms.EmailField(label='Email')
-    # username = forms.CharField(label='Username')
-    # password1 = forms.CharField(label='Enter password')
-    # password2 = forms.CharField(label='Enter again password')
-    pass
+    first_name = forms.CharField(label='First name')
+    last_name = forms.CharField(label='Last name')
+    email = forms.EmailField(label='Email')
+    username = forms.CharField(label='Username')
+    password1 = forms.CharField(label='Enter password')
+    password2 = forms.CharField(label='Enter again password')

@@ -4,10 +4,16 @@
     <div class="card" style="width: 50rem">
         <div class="card-body">
             <h5 class="card-title">{{ post.title }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">For Misha Sorokin</h6>
+            <h6 class="card-subtitle mb-2 text-muted">For {{ post.user.username }}</h6>
             <p class="card-text">{{ post.text }}</p>
-            <a href="#" class="card-link">Comment</a>
-            <a href="#" class="card-link">Like</a>
+            <div style="display: flex; flex-direction: row">
+                <button onclick="postLike()">
+                    {% load static %}
+                    <img style="height: 25px; width: 25px; justify-content: center; margin-right: 5px" src="{% static 'image/heart-solid.svg' %}">
+                </button>
+                <div style="margin-right: 30px;">{{ amount_like_post }}</div>
+                <button type="button" onclick="showBlockComments()" class="card-link">Comment</button>
+            </div>
             <div>
                 <label>Tags:</label>
                 {% for tag in tags %}
@@ -21,15 +27,28 @@
                 Delete post
             </a>
         </div>
-
-
-        <form action="{% url 'add_comment_url' post.id %}" method="post">
-            {% csrf_token %}
-            {{ form_comment }}
-            <button type="submit">Add</button>
-        </form>
-
-        {% include 'posts/comments_list.html' %}
-
+        <div id="blockComments" style="display: block">
+            <form action="{% url 'add_comment_url' post.id %}" method="post">
+                {% csrf_token %}
+                {{ form_comment }}
+                <button type="submit">Add</button>
+            </form>
+            {% include 'posts/comments_list.html' %}
+        </div>
     </div>
+    <script>
+        function showBlockComments(){
+            let blockComments = document.querySelector('#blockComments')
+            if(blockComments.style.display === 'block'){
+                blockComments.style.display = 'none'
+            }else{
+                blockComments.style.display = 'block'
+            }
+        }
+        async function postLike(){
+            await fetch('{% url 'post_like_url' post.id %}')
+            console.log('{% url 'post_like_url' post.id %}')
+            location.reload()
+        }
+    </script>
 {% endblock %}

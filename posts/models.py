@@ -8,7 +8,7 @@ class Posts(models.Model):
     title = models.CharField(max_length=70)
     text = models.TextField(blank=True)
     header_color = models.CharField(default='dark', max_length=30)
-    author = models.IntegerField(default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=15)
     amount_likes = models.IntegerField(default=0)
     tags = models.ManyToManyField('Tag', blank=True, related_name='posts')
 

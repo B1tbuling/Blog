@@ -22,7 +22,7 @@
                             <img style="height: 25px; width: 25px; justify-content: center; margin-right: 5px" src="{% static 'image/heart-solid.svg' %}">
                         </button>
                         <div style="margin-right: 30px;">
-                            {{ comment.amount_like }}
+                            {{ comment.amount_like_comment }}
                         </div>
                         {% if request.user.id == comment.comment.user.id %}
                             <div>
@@ -51,7 +51,7 @@
                                         <img style="height: 25px; width: 25px; justify-content: center; margin-right: 5px" src="{% static 'image/heart-solid.svg' %}">
                                     </button>
                                     <div>
-                                        {{ comment.amount_like }}
+                                        {{ comment.amount_like_comment }}
                                     </div>
                                 </div>
                                 {% if request.user.id == comment.comment.user.id %}
