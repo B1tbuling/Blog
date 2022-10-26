@@ -7,9 +7,13 @@
             <h6 class="card-subtitle mb-2 text-muted">For {{ post.user.username }}</h6>
             <p class="card-text">{{ post.text }}</p>
             <div style="display: flex; flex-direction: row">
-                <button onclick="postLike()">
+                <button onclick="postLike()" style="background: none; border: none">
                     {% load static %}
-                    <img style="height: 25px; width: 25px; justify-content: center; margin-right: 5px" src="{% static 'image/heart-solid.svg' %}">
+                    {% if is_liked %}
+                        <img style="height: 25px; width: 25px; justify-content: center; margin-right: 5px" src="{% static 'image/heart-solid.svg' %}" alt="...">
+                    {% else %}
+                        <img style="height: 25px; width: 25px; justify-content: center; margin-right: 5px" src="{% static 'image/heart-svgrepo-com.svg' %}" alt="...">
+                    {% endif %}
                 </button>
                 <div style="margin-right: 30px;">{{ amount_like_post }}</div>
                 <button type="button" onclick="showBlockComments()" class="card-link">Comment</button>

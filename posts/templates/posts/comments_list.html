@@ -11,27 +11,33 @@
                     <h5 style="margin-left: 20px">{{ comment.comment.date_create }}</h5>
                 </div>
 
-
                 <div id="comment{{ comment.comment.id }}" style="display: flex; flex-direction: column;">
                     <div>
                         {{ comment.comment.text }}
                     </div>
                     <div style="margin-right: 30px; display: flex; flex-direction: row">
-                        <button onclick="commentLike('{{ comment.comment.id }}')">
+                        <button class="button_comments" onclick="commentLike('{{ comment.comment.id }}')">
                             {% load static %}
-                            <img style="height: 25px; width: 25px; justify-content: center; margin-right: 5px" src="{% static 'image/heart-solid.svg' %}">
+                            {% if comment.is_laked_comment %}
+                                <img style="height: 25px; width: 25px; justify-content: center; margin-right: 5px" src="{% static 'image/heart-solid.svg' %}" alt="...">
+                            {% else %}
+                                <img style="height: 25px; width: 25px; justify-content: center; margin-right: 5px" src="{% static 'image/heart-svgrepo-com.svg' %}" alt="...">
+                            {% endif %}
                         </button>
                         <div style="margin-right: 30px;">
                             {{ comment.amount_like_comment }}
                         </div>
                         {% if request.user.id == comment.comment.user.id %}
                             <div>
-                                <button onclick="showUpdateComment({{ comment.comment.id }})" style="margin-right: 30px">edit</button>
+                                <button class="button_comments" onclick="showUpdateComment({{ comment.comment.id }})" style="margin-right: 30px">
+                                    edit
+                                </button>
                                 <a href="{% url 'delete_comment_url' comment.comment.id %}">delete</a>
                             </div>
                         {% endif %}
                     </div>
                 </div>
+
                 <div id="update_comment{{ comment.comment.id }}" style="display: none;">
                     <div style="display: flex; flex-direction: row">
                         <form
@@ -46,9 +52,17 @@
                             <div style="display: flex; flex-direction: row">
 
                                 <div style="margin-right: 30px; display: flex; flex-direction: row">
-                                    <button type="button" onclick="commentLike('{{ comment.comment.id }}')">
+                                    <button
+                                        type="button"
+                                        onclick="commentLike('{{ comment.comment.id }}')"
+                                        class="button_comments"
+                                        >
                                         {% load static %}
-                                        <img style="height: 25px; width: 25px; justify-content: center; margin-right: 5px" src="{% static 'image/heart-solid.svg' %}">
+                                        {% if comment.is_laked_comment %}
+                                            <img style="height: 25px; width: 25px; justify-content: center; margin-right: 5px" src="{% static 'image/heart-solid.svg' %}" alt="...">
+                                        {% else %}
+                                            <img style="height: 25px; width: 25px; justify-content: center; margin-right: 5px" src="{% static 'image/heart-svgrepo-com.svg' %}" alt="...">
+                                        {% endif %}
                                     </button>
                                     <div>
                                         {{ comment.amount_like_comment }}
@@ -56,8 +70,10 @@
                                 </div>
                                 {% if request.user.id == comment.comment.user.id %}
                                     <div style="display: flex; flex-direction: row">
-                                        <button type="button" onclick="showUpdateComment({{ comment.comment.id }})" style="margin-right: 30px">cancel</button>
-                                        <button type="submit" style="margin-right: 30px">save</button>
+                                        <button type="button" class="button_comments" onclick="showUpdateComment({{ comment.comment.id }})" style="margin-right: 30px">
+                                            cancel
+                                        </button>
+                                        <button type="submit" class="button_comments" style="margin-right: 30px">save</button>
                                     </div>
                                 {% endif %}
                             </div>

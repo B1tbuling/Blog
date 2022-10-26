@@ -12,7 +12,8 @@ def register_user(request):
         return render(request, 'register_user.html', context={'form': reg_form})
 
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegisterUserForm(request.POST)
+        print(request.POST)
         if form.is_valid():
             form.save()
             return redirect(reverse('login_user_url'))
