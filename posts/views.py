@@ -101,7 +101,7 @@ class CreatePost(View):
         if request.user.id is None:
             return HttpResponse(status=401)
         if form_post.is_valid():
-            post = form_post.save()
+            post = form_post.save(commit=False)
             post.user_id = request.user.id
             post.save()
             return redirect(reverse('get_post_page_url', kwargs={'pk': post.id}))

@@ -1,6 +1,7 @@
 from django.db import models
 from django.shortcuts import reverse
 from django.contrib.auth.models import User
+from users.models import CustomerUser
 
 
 class Posts(models.Model):
@@ -8,7 +9,7 @@ class Posts(models.Model):
     title = models.CharField(max_length=70)
     text = models.TextField(blank=True)
     header_color = models.CharField(default='dark', max_length=30)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=15)
+    user = models.ForeignKey(CustomerUser, on_delete=models.CASCADE, default=15)
     amount_likes = models.IntegerField(default=0)
     tags = models.ManyToManyField('Tag', blank=True, related_name='posts')
 
@@ -35,7 +36,7 @@ class Tag(models.Model):
 
 class Comments(models.Model):
     post = models.ForeignKey('Posts', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomerUser, on_delete=models.CASCADE)
     text = models.TextField(blank=True)
     amount_likes = models.IntegerField(default=0)
     date_create = models.DateTimeField(auto_now=True)
@@ -46,7 +47,7 @@ class Comments(models.Model):
 
 class CommentLike(models.Model):
     comment = models.ForeignKey(Comments, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomerUser, on_delete=models.CASCADE)
 
     class Meta:
         db_table = "comments_likes"
@@ -54,7 +55,7 @@ class CommentLike(models.Model):
 
 class PostLike(models.Model):
     post = models.ForeignKey(Posts, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomerUser, on_delete=models.CASCADE)
 
     class Meta:
         db_table = "posts_likes"

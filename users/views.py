@@ -57,5 +57,30 @@ def logout_user(request):
 
 def get_profile_user(request):
     profile_data = request.user
-    return render(request, 'profile_user.html', context={'profile_data': profile_data})
+    profile_photo = PhotoProfileUser()
+    return render(request,
+        'profile_user.html',
+        context={
+            'profile_data': profile_data,
+            'profile_photo': profile_photo
+        }
+    )
+
+
+class PhotoUser(View):
+
+    def post(self, request):
+        user = CustomerUser.objects.get(id=request.user.id)
+        # user.profile_image = request.POST['profile_image']
+        # user.save()
+        print('+++++++++')
+        print(request.POST)
+        print('---------')
+        print(request.POST['profile_image'])
+        print('+++++++++')
+        CustomerUser(request.FILES, request.user.id)
+        return redirect('get_profile_user_url')
+
+
+
 

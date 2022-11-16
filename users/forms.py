@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.forms import ModelForm
 from django import forms
 from .models import *
-from django.contrib.auth.models import User
+from users.models import CustomerUser
 
 
 class RegisterUserForm(UserCreationForm):
@@ -12,5 +12,13 @@ class RegisterUserForm(UserCreationForm):
     email = forms.EmailField(label='Email')
 
     class Meta:
-        model = User
-        fields = ['username', 'password1', 'password2', 'first_name', 'last_name', 'email']
+        model = CustomerUser
+        fields = ['username', 'password1', 'password2', 'first_name', 'last_name', 'email', 'profile_image']
+
+
+class PhotoProfileUser(forms.ModelForm):
+
+    class Meta:
+        model = CustomerUser
+        fields = ['profile_image']
+
