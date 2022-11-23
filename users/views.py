@@ -4,6 +4,8 @@ from django.contrib.auth.views import LoginView
 from django.views import View
 from users.forms import *
 from django.http import HttpResponse
+from django.core.files.storage import FileSystemStorage
+import uuid
 
 
 def register_user(request):
@@ -57,12 +59,12 @@ def logout_user(request):
 
 def get_profile_user(request):
     profile_data = request.user
-    profile_photo = PhotoProfileUser()
+    form = PhotoProfileUser()
     return render(request,
         'profile_user.html',
         context={
             'profile_data': profile_data,
-            'profile_photo': profile_photo
+            'profile_photo_form': form
         }
     )
 
@@ -70,15 +72,11 @@ def get_profile_user(request):
 class PhotoUser(View):
 
     def post(self, request):
-        user = CustomerUser.objects.get(id=request.user.id)
-        # user.profile_image = request.POST['profile_image']
-        # user.save()
-        print('+++++++++')
-        print(request.POST)
-        print('---------')
-        print(request.POST['profile_image'])
-        print('+++++++++')
-        CustomerUser(request.FILES, request.user.id)
+        image = request.FILES['profile_image']
+        image_name = f'profile_images/{uuid.uuid4()}'
+        FileSystemStorage().save(image_name, image)
+        request.user.profile_image = image_name
+        request.user.save()
         return redirect('get_profile_user_url')
 
 
