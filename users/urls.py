@@ -8,5 +8,6 @@ urlpatterns = [
     path('login/', login_user, name='login_user_url'),
     path('logout/', logout_user, name='logout_user_url'),
     path('profile/', get_profile_user, name='get_profile_user_url'),
-    path('profile/photo', PhotoUser.as_view(), name='add_photo_profile_url')
+    path('profile/photo', UpdateProfilePhoto.as_view(), name='update_profile_photo_url'),
+    path('profile/data', UpdateProfileData.as_view(), name='update_profile_data_url')
 ]

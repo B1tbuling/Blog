@@ -1,17 +1,110 @@
 {% extends 'templates/index.html' %}
 
 {% block content %}
-    <h1>{{ profile_data.username }}</h1>
-    <h1>{{ profile_data.last_name}}</h1>
-    <img
-        src="{{ profile_data.profile_image.url }}"
-        alt="..."
-        style="height: 600px; width: 2000px"
-    >
-    <h1>{{ profile_data.profile_image.url }}</h1>
-    <form action="{% url 'add_photo_profile_url' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <h1>{{ profile_photo_form }}</h1>
+    <div class="card" style="width: 25rem; background-color: #e4f1ff">
+        <div class="profile-photo">
+            {% if profile_data.profile_image %}
+                <img
+                    src="{{ profile_data.profile_image.url }}"
+                    alt="..."
+                    style="
+                        width: 25rem;
+                        border-radius: 15%;
+                        justify-content: center;
+                        padding: 1rem;
+                        "
+                >
+            {% else %}
+                <img
+                    src="/media/profile_images/defolt_profile_image.jpg"
+                    alt="..."
+                    style="height: 200px"
+                >
+            {% endif %}
+        </div>
+
+        <div class="card-body">
+            <h5 class="card-title">
+                <div id="BlockDataProfile" style="display: block">
+                    <div style="display: flex; flex-direction: column">
+                        <div style="font-weight: bold; display: flex; flex-direction: row">
+                            {{ profile_data.first_name }}
+                            {{ profile_data.last_name}}
+                        </div>
+                        <div style="display: flex; flex-direction: column">
+                            Birthday: {{ profile_data.birth_date }}
+                        </div>
+                    </div>
+                    <p class="card-text">{{ profile_data.profile_status }}</p>
+                    <button
+                        class="btn btn-primary"
+                        onclick="showBlockUpdateProf()"
+                        >
+                        Update profile
+                    </button>
+                </div>
+                <div id="BlockUpdateForm" style="display: none">
+                    <form action="{% url 'update_profile_data_url' %}" method="post">
+                        {% csrf_token %}
+                        {% for form in profile_data_form %}
+                            <h3>{{ form.label }}</h3>
+                            <h3>{{ form }}</h3>
+                        {% endfor %}
+                        <button
+                                type="submit"
+                                class="btn btn-primary"
+                                onclick="showBlockUpdateProf()"
+                                id="">
+                            Change
+                        </button>
+                    </form>
+                </div>
+            </h5>
+        </div>
+    </div>
+
+    <div class="input-group mb-3">
+        <form action="{% url 'update_profile_photo_url' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label>
+{#                <div style="display: none">#}
+                {{ profile_photo_form }}
+{#                </div>#}
+{#                <img#}
+{#                        src="/static/image/profile_preview.svg"#}
+{#                        alt="..."#}
+{#                        class="profile-preview"#}
+{#                        style="width: 100px"#}
+{#                >#}
+            </label>
         <button type="submit">Add</button>
     </form>
+    </div>
+
+    <script>
+        const input = document.getElementById('input_photo_profile')
+        const input = document.getElementById('input_photo_profile')
+        input.addEventListener('change', updateImage)
+        console.log(input)
+
+        function updateImage(){
+            console.log(this)
+            console.log(this.files)
+            if (this.files && this.files.length){
+
+            }
+        }
+
+        function showBlockUpdateProf(){
+            let BlockDataProfile = document.getElementById('BlockDataProfile')
+            let BlockUpdateForm = document.getElementById('BlockUpdateForm')
+            if (BlockDataProfile.style.display === 'block'){
+                BlockDataProfile.style.display = 'none'
+                BlockUpdateForm .style.display = 'block'
+            }else{
+                 BlockDataProfile.style.display = 'block'
+                BlockUpdateForm .style.display = 'none'
+            }
+        }
+    </script>
 {% endblock %}

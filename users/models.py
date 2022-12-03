@@ -5,3 +5,4 @@ from django.contrib.auth.models import AbstractUser
 class CustomerUser(AbstractUser):
     birth_date = models.DateField(null=True, blank=True)
     profile_image = models.ImageField(null=True, blank=True)
+    profile_status = models.TextField(null=True, blank=True)

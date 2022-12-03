@@ -59,17 +59,20 @@ def logout_user(request):
 
 def get_profile_user(request):
     profile_data = request.user
-    form = PhotoProfileUser()
+    profile_data_form = ProfileDataUserForm(instance=request.user)
+    profile_photo_form = ProfilePhotoUserForm()
+
     return render(request,
         'profile_user.html',
         context={
             'profile_data': profile_data,
-            'profile_photo_form': form
+            'profile_data_form': profile_data_form,
+            'profile_photo_form': profile_photo_form
         }
     )
 
 
-class PhotoUser(View):
+class UpdateProfilePhoto(View):
 
     def post(self, request):
         image = request.FILES['profile_image']
@@ -77,6 +80,17 @@ class PhotoUser(View):
         FileSystemStorage().save(image_name, image)
         request.user.profile_image = image_name
         request.user.save()
+        return redirect('get_profile_user_url')
+
+
+class UpdateProfileData(View):
+
+    def post(self, request):
+        print(request.POST)
+        profile_data_form = ProfileDataUserForm(request.POST, instance=request.user)
+        if profile_data_form.is_valid():
+            profile_data_form.save()
+            return redirect('get_profile_user_url')
         return redirect('get_profile_user_url')
 
 
