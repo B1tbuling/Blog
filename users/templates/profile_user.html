@@ -2,26 +2,54 @@
 
 {% block content %}
     <div class="card" style="width: 25rem; background-color: #e4f1ff">
-        <div class="profile-photo">
-            {% if profile_data.profile_image %}
-                <img
-                    src="{{ profile_data.profile_image.url }}"
-                    alt="..."
-                    style="
-                        width: 25rem;
-                        border-radius: 15%;
-                        justify-content: center;
-                        padding: 1rem;
-                        "
-                >
-            {% else %}
-                <img
-                    src="/media/profile_images/defolt_profile_image.jpg"
-                    alt="..."
-                    style="height: 200px"
-                >
-            {% endif %}
-        </div>
+        <div>
+            <div id="profile-photo" style="display: block">
+                {% if profile_data.profile_image %}
+                    <img
+                        src="{{ profile_data.profile_image.url }}"
+                        alt="..."
+                        style="
+                            width: 25rem;
+                            border-radius: 10%;
+                            justify-content: center;
+                            padding: 1rem;
+                            "
+                    >
+                {% else %}
+                    <img
+                        src="/media/profile_images/defolt_profile_image.jpg"
+                        alt="..."
+                        style="height: 200px"
+                    >
+                {% endif %}
+            </div>
+            <div id="update-photo" style="display: none">
+                <div class="input-group mb-3">
+                    <form action="{% url 'update_profile_photo_url' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label style="
+                            width: 23rem;
+                            margin: 1rem;
+                            background: white;
+                            border-radius: 10%;
+                            text-align: center"
+                        >
+                            <div style="display: none">
+                                {{ profile_photo_form }}
+                            </div>
+                            <img
+                                    src="/static/image/add-photo.svg"
+                                    alt="..."
+                                    id="profile-preview"
+                                    style="width: 12rem"
+                            >
+                        </label>
+                        <button type="submit" style="margin-left: 16px" class="btn btn-primary">
+                            Add
+                        </button>
+                    </form>
+                </div>
+            </div>
 
         <div class="card-body">
             <h5 class="card-title">
@@ -36,12 +64,33 @@
                         </div>
                     </div>
                     <p class="card-text">{{ profile_data.profile_status }}</p>
-                    <button
-                        class="btn btn-primary"
-                        onclick="showBlockUpdateProf()"
-                        >
-                        Update profile
-                    </button>
+                    <div style="display: flex; flex-direction: row">
+                        <button
+                            class="btn btn-primary"
+                            onclick="showBlockUpdateProf()"
+                            style="margin-right: 75px"
+                            >
+                            Update profile
+                        </button>
+                        <div>
+                            <button
+                                class="btn btn-primary"
+                                onclick="showBlockUpdatePhoto()"
+                                id="button-change-photo"
+                                style="display: block"
+                                >
+                                Change photo
+                            </button>
+                            <button
+                                class="btn btn-primary"
+                                onclick="showBlockUpdatePhoto()"
+                                id="button-cancel-update-photo"
+                                style="display: none"
+                                >
+                                Cancel change
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div id="BlockUpdateForm" style="display: none">
                     <form action="{% url 'update_profile_data_url' %}" method="post">
@@ -63,27 +112,9 @@
         </div>
     </div>
 
-    <div class="input-group mb-3">
-        <form action="{% url 'update_profile_photo_url' %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <label>
-{#                <div style="display: none">#}
-                {{ profile_photo_form }}
-{#                </div>#}
-{#                <img#}
-{#                        src="/static/image/profile_preview.svg"#}
-{#                        alt="..."#}
-{#                        class="profile-preview"#}
-{#                        style="width: 100px"#}
-{#                >#}
-            </label>
-        <button type="submit">Add</button>
-    </form>
-    </div>
-
     <script>
         const input = document.getElementById('input_photo_profile')
-        const input = document.getElementById('input_photo_profile')
+        const preview = document.getElementById('profile-preview')
         input.addEventListener('change', updateImage)
         console.log(input)
 
@@ -91,7 +122,8 @@
             console.log(this)
             console.log(this.files)
             if (this.files && this.files.length){
-
+                preview.src = window.URL.createObjectURL(this.files[0])
+                preview.setAttribute('style','width: 23rem')
             }
         }
 
@@ -100,10 +132,28 @@
             let BlockUpdateForm = document.getElementById('BlockUpdateForm')
             if (BlockDataProfile.style.display === 'block'){
                 BlockDataProfile.style.display = 'none'
-                BlockUpdateForm .style.display = 'block'
+                BlockUpdateForm.style.display = 'block'
             }else{
-                 BlockDataProfile.style.display = 'block'
-                BlockUpdateForm .style.display = 'none'
+                BlockDataProfile.style.display = 'block'
+                BlockUpdateForm.style.display = 'none'
+            }
+        }
+
+        function showBlockUpdatePhoto(){
+            let BlockProfilePhoto = document.getElementById('profile-photo')
+            let BlockProfileUpdatePhoto = document.getElementById('update-photo')
+            let ButtonChangePhoto = document.getElementById('button-change-photo')
+            let ButtonCancelUpdatePhoto = document.getElementById('button-cancel-update-photo')
+            if (BlockProfilePhoto.style.display === 'block'){
+                BlockProfilePhoto.style.display = 'none'
+                BlockProfileUpdatePhoto.style.display = 'block'
+                ButtonChangePhoto.style.display = 'none'
+                ButtonCancelUpdatePhoto.style.display = 'block'
+            }else{
+                BlockProfilePhoto.style.display = 'block'
+                BlockProfileUpdatePhoto.style.display = 'none'
+                ButtonChangePhoto.style.display = 'block'
+                ButtonCancelUpdatePhoto.style.display = 'none'
             }
         }
     </script>

@@ -60,3 +60,11 @@ class PostLike(models.Model):
     class Meta:
         db_table = "posts_likes"
 
+
+class ImagesPost(models.Model):
+    post = models.ForeignKey(Posts, on_delete=models.CASCADE)
+    image = models.ImageField(null=True, blank=True)
+
+    class Meta:
+        db_table = "images_post"
+
