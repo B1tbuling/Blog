@@ -14,6 +14,12 @@ class PostModelForm(forms.ModelForm):
         }
 
 
+class ImagesForPostModelForm(forms.ModelForm):
+    class Meta:
+        model = ImagesPost
+        fields = ['image']
+
+
 class TagModelForm(forms.ModelForm):
     class Meta:
         model = Tag

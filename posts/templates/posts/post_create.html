@@ -5,29 +5,29 @@
         {% csrf_token %}
         <div>
             <div>Title</div>
-            {{ form.title }}
+            {{ post_data_form.title }}
         </div>
         <div>
             <div>Text</div>
-            {{ form.text }}
+            {{ post_data_form.text }}
         </div>
         <div>
             <div>Add tag</div>
-            {{ form.tags }}
+            {{ post_data_form.tags }}
         </div>
         <div>
             <div>Add photo for post</div>
-            {{ form.image }}
+            {{ post_data_form.image }}
         </div>
-        <div style="width: 600px">
-            <lable>Choice Tag</lable>
-            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                <option selected>#Tag</option>
-                {% for tag in tags %}
-                    <option value="{{ tag.id }}">#{{ tag.tag }}</option>
-                {% endfor %}
-            </select>
-        </div>
+{#        <div style="width: 600px">#}
+{#            <lable>Choice Tag</lable>#}
+{#            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">#}
+{#                <option selected>#Tag</option>#}
+{#                {% for tag in tags %}#}
+{#                    <option value="{{ tag.id }}">#{{ tag.tag }}</option>#}
+{#                {% endfor %}#}
+{#            </select>#}
+{#        </div>#}
         <button type="submit">Send</button>
     </form>
 {% endblock %}

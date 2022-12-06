@@ -92,9 +92,10 @@ class GetPostsList(View):
 class CreatePost(View):
 
     def get(self, request):
-        form = PostModelForm()
+        post_data_form = PostModelForm()
+        post_images_form = ImagesForPostModelForm()
         tags = Tag.objects.all()
-        return render(request, 'posts/post_create.html', context={'form': form, 'tags': tags})
+        return render(request, 'posts/post_create.html', context={'post_data_form': post_data_form, 'post_images_form': post_images_form, 'tags': tags})
 
     def post(self, request):
         form_post = PostModelForm(request.POST)
@@ -157,6 +158,7 @@ def create_tag(request):
             return redirect(reverse('get_tag_page_url', kwargs={'slug': new_tag.tag}))
 
     return HttpResponse(status=405)
+
 
 class UpdateTag(View):
     def get(self, request, slug):
